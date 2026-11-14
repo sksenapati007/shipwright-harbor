@@ -138,9 +138,9 @@
       "id": "stocks",
       "kind": "ship",
       "title": "Stocks",
-      "summary": "Day chart with MA10 and MA20 for any JSON price endpoint you configure (no key built in).",
+      "summary": "Indian markets by sector: Nifty, Sensex, NSE and BSE sector indices and large caps, day chart with M",
       "author": "Shipwright",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "api": 1,
       "tags": [
         "finance",
@@ -148,8 +148,8 @@
       ],
       "accounts": [],
       "path": "ships/stocks.lua",
-      "size": 10922,
-      "sha256": "d60e45e515adb99f45f714d11940ad3adf28b3ec48ce6a78b1b1b0256ea72619"
+      "size": 19213,
+      "sha256": "c04b9ab50609d8947deda78a9333477f66fc1202baab35632b4f81a9822ddd0c"
     }
   ]
 }

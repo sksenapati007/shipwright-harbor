@@ -1,16 +1,43 @@
 # Stocks: where the prices come from
 
-The Stocks ship ships with a default symbol list and **no data source and no key**:
+The Stocks ship works out of the box for Indian markets, with **no key and nothing to set up**. The default source is
+Yahoo Finance's public chart endpoint:
 
 ```
-^NSEI  ^BSESN  RELIANCE.NS  TCS.NS  HDFCBANK.NS  INFY.NS  ICICIBANK.NS
+https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval=5m&range=1d
 ```
 
-(Nifty 50, Sensex, and five large caps, written the Yahoo way: `.NS` is NSE, `^` marks an index.)
-Until you give it a data source the ship shows "Set a data source in Harbor or edit stocks.lua".
-You can replace the symbol list with the stash key `symbols` (comma separated) from Harbor.
+Notes, please read:
 
-## What the ship needs from a URL
+- It is **unofficial**. Yahoo can change it, block it or rate-limit it at any time. If it breaks, use one of the alternatives below.
+- For personal use only. The device fetches the data for you; nothing is stored or republished.
+- It needs the User-Agent `Shipwright/1` (the device sends it). A request with no User-Agent is answered with HTTP 429.
+- The ship asks only for the symbols of the group on screen, one request at a time (about 6.5 KB each), when you open or
+  change a group, and then at most once a minute while the ship stays open. Nothing runs in the background.
+- Quotes are delayed (about 15 minutes) and the chart is the current day in 5-minute steps.
+
+## Groups and symbols
+
+Keys: in the list, Up and Down pick a row, Left and Right change group, OK opens the chart (or loads an empty group).
+In the chart, OK fetches again, Left and Right move to the previous and next symbol, Up or Down returns to the list.
+
+| Group | Screen name: symbol |
+| --- | --- |
+| Indices | Nifty 50: `^NSEI`, Sensex: `^BSESN` |
+| NSE sectors | Nifty Bank `^NSEBANK`, Nifty IT `^CNXIT`, Nifty Auto `^CNXAUTO`, Nifty Pharma `^CNXPHARMA`, Nifty FMCG `^CNXFMCG`, Nifty Metal `^CNXMETAL`, Nifty Energy `^CNXENERGY`, Nifty Realty `^CNXREALTY`, Nifty Media `^CNXMEDIA`, PSU Bank `^CNXPSUBANK`, Fin Services `NIFTY_FIN_SERVICE.NS` |
+| BSE sectors | BSE Bankex `BSE-BANK.BO`, BSE IT `BSE-IT.BO`, BSE Auto `BSE-AUTO.BO`, BSE Health `BSE-HC.BO`, BSE Metal `BSE-METAL.BO`, BSE Oil Gas `BSE-OILGAS.BO`, BSE Realty `BSE-REALTY.BO`, BSE Power `BSE-POWER.BO`, BSE Cap Goods `BSE-CG.BO`, BSE Durables `BSE-CD.BO`, BSE Teck `BSE-TECK.BO`, BSE PSU `BSE-PSU.BO` |
+| Stocks | Reliance `RELIANCE.NS`, TCS `TCS.NS`, HDFC Bank `HDFCBANK.NS`, Infosys `INFY.NS`, ICICI Bank `ICICIBANK.NS` |
+| My list | your own symbols (stash key `symbols`, comma separated, Yahoo style; `.NS` is NSE, `.BO` is BSE, `^` marks an index) |
+
+BSE FMCG and BSE Finance have no working Yahoo symbol, so they are not listed. A symbol Yahoo does not know shows
+"no data for <symbol>" and the rest of the group still loads.
+
+## Using another source
+
+The ship reads two answer shapes: Yahoo's chart JSON (null closes are skipped; `longName` or `shortName` is the title) and
+the simple shape below. Set the stash key `src` (Harbor can write it) or edit `SOURCE` in `stocks.lua` to switch.
+
+## What the ship needs from a URL (simple shape)
 
 One HTTPS GET per symbol. `{symbol}` in the URL template is replaced by the current symbol (letters, digits, `. - _` and `^`;
 `^` is sent as `%5E`). The answer must be HTTP 200 with this JSON, oldest point first, `t` in Unix seconds:
@@ -24,7 +51,7 @@ do not want to bake into a script on a device. The clean fix is a tiny proxy tha
 Store the proxy's URL as the ship's `src` stash key (Harbor can write it), for example
 `https://stocks.example.workers.dev/q/{symbol}`.
 
-## Free providers (each needs a free key; check current limits on their sites)
+## Alternative providers (each needs a free key; check current limits on their sites)
 
 I could not test these offline; coverage of Indian symbols on free tiers changes, so confirm the symbol in the provider's
 own symbol search before relying on it.

@@ -1,0 +1,122 @@
+{
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEI?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_nsei.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5EBSESN?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_bsesn.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEBANK?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_nsebank.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXIT?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxit.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXAUTO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxauto.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXPHARMA?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxpharma.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXFMCG?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxfmcg.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXMETAL?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxmetal.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXENERGY?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxenergy.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXREALTY?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxrealty.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXMEDIA?interval=5m&range=1d": {
+  "status": 404,
+  "file": "_cnxmedia.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXPSUBANK?interval=5m&range=1d": {
+  "status": 200,
+  "file": "_cnxpsubank.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/NIFTY_FIN_SERVICE.NS?interval=5m&range=1d": {
+  "status": 200,
+  "file": "nifty_fin_service_ns.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-BANK.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_bank_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-IT.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_it_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-AUTO.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_auto_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-HC.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_hc_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-METAL.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_metal_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-OILGAS.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_oilgas_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-REALTY.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_realty_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-POWER.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_power_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-CG.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_cg_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-CD.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_cd_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-TECK.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_teck_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BSE-PSU.BO?interval=5m&range=1d": {
+  "status": 200,
+  "file": "bse_psu_bo.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/RELIANCE.NS?interval=5m&range=1d": {
+  "status": 200,
+  "file": "reliance_ns.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/TCS.NS?interval=5m&range=1d": {
+  "status": 200,
+  "file": "tcs_ns.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/HDFCBANK.NS?interval=5m&range=1d": {
+  "status": 200,
+  "file": "hdfcbank_ns.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/INFY.NS?interval=5m&range=1d": {
+  "status": 200,
+  "file": "infy_ns.json"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/ICICIBANK.NS?interval=5m&range=1d": {
+  "status": 200,
+  "file": "icicibank_ns.json"
+ }
+}

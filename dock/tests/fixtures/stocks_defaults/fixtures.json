@@ -1,5 +1,5 @@
 {
- "https://data.test/q/%5ENSEI.json": {
+ "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEI?interval=5m&range=1d": {
   "status": 200,
   "file": "nsei.json"
  }

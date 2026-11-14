@@ -33,7 +33,7 @@ META = {
     "analytics": {"summary": "Chart any numeric series from a JSON URL you configure (no default URL).", "author": "Shipwright", "tags": ["finance", "chart"]},
     "github": {"summary": "Open issues, review requests and notifications from GitHub. Sign in under Connections.", "author": "Shipwright", "tags": ["tool", "dev"]},
     "coin": {"summary": "Toss a coin: heads or tails with a pixel-art coin, a decide mode with your own words, and your last 10 tosses.", "author": "Shipwright", "tags": ["game", "tool"]},
-    "stocks": {"summary": "Day chart with MA10 and MA20 for any JSON price endpoint you configure (no key built in).", "author": "Shipwright", "tags": ["finance", "chart"]},
+    "stocks": {"summary": "Indian markets by sector: Nifty, Sensex, NSE and BSE sector indices and large caps, day chart with MA10 and MA20. Free public data, no key (or your own JSON endpoint).", "author": "Shipwright", "tags": ["finance", "chart"]},
 }
 
 
