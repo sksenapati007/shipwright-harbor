@@ -429,6 +429,13 @@
    "keys": "lock.mode,lock.every,lock.quiet"
   },
   {
+   "name": "lock screen clock mode",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"lock.mode\":\"clock\",\"lock.every\":5,\"lock.quiet\":true}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b226c6f636b2e6d6f6465223a22636c6f636b222c226c6f636b2e6576657279223a352c226c6f636b2e7175696574223a747275657d7d",
+   "ok": true,
+   "keys": "lock.mode,lock.every,lock.quiet"
+  },
+  {
    "name": "lock every minus one is the mode default",
    "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"lock.every\":-1}}",
    "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b226c6f636b2e6576657279223a2d317d7d",
