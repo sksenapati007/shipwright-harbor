@@ -43,7 +43,7 @@
       "title": "Blockfall",
       "summary": "Falling-blocks puzzle on a 10x20 dot grid. Move, turn, drop, clear rows.",
       "author": "Shipwright",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "api": 1,
       "tags": [
         "game",
@@ -51,8 +51,8 @@
       ],
       "accounts": [],
       "path": "ships/blockfall.lua",
-      "size": 7287,
-      "sha256": "ddb43ee1ef98e30445cede7ccd67b9ed785761f3aa0af3dd4e846ba75097bba1"
+      "size": 9565,
+      "sha256": "4383e490315dd9a79bc09527264ce40b7108c4ef409c3ec03049f8fe2ac8c723"
     },
     {
       "id": "coin",

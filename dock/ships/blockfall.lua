@@ -1,9 +1,11 @@
 -- @ship   Blockfall
 -- @icon   game
 -- @api    1
--- @version 1.0.0
+-- @version 1.1.0
 -- Falling-blocks puzzle on a 10x20 dot-grid well. Left and right move, Up turns, Down drops one row, OK drops the piece
 -- all the way (OK starts and restarts), hold OK to pause. Full rows clear. The game is saved on exit and comes back paused.
+-- Tilt (needs the tilt sensor): on the start, pause and game-over screens Up turns tilt control on or off. While it is
+-- on, rolling the device left or right moves the piece, faster the further you roll; the keys keep working.
 
 local W, H = 10, 20
 local GC, GR = 16, 20            -- grid: the well, a gap column, then a five-column side panel for the next piece
@@ -46,6 +48,11 @@ local kind, rot, px, py = 0, 0, 0, 0   -- the falling piece (kind 0: none yet)
 local nextk = 0
 local bag = {}
 local score, lines, level, best = 0, 0, 1, 0
+local tilt_ok = false            -- the device has a tilt sensor (found at launch)
+local tilt_on = false            -- the player turned tilt control on (saved)
+local tilt_pow = false           -- the sensor is powered: tilt on and a game running
+local tacc, gacc = 0, 0          -- tilt step accumulator; gravity time accumulator (ms)
+local TILT_GAIN = 1.25           -- columns per pulse at full tilt
 
 local function empty_board()
   board = {}
@@ -77,8 +84,22 @@ local function interval()
   return ms < FLOOR and FLOOR or ms
 end
 
+local function rate()            -- the pulse period: fast while tilt steers, so the piece can follow the roll
+  return tilt_pow and FLOOR or interval()
+end
+
+local function sync_tilt()       -- power the sensor only while a game runs with tilt on
+  local want = tilt_ok and tilt_on and mode == "run"
+  if want ~= tilt_pow then
+    tilt_pow = want
+    ship.tilt_enable(want)
+    tacc, gacc = 0, 0
+    if mode == "run" then ship.every(rate()) end
+  end
+end
+
 local function persist()
-  ship.save({ mode = mode, board = table.concat(board), kind = kind, rot = rot, px = px, py = py, next = nextk,
+  ship.save({ tilt = tilt_on, mode = mode, board = table.concat(board), kind = kind, rot = rot, px = px, py = py, next = nextk,
               bag = bag, score = score, lines = lines, level = level, best = best })
 end
 
@@ -86,6 +107,7 @@ local function finish()
   mode = "over"
   if score > best then best = score end
   ship.every(0)
+  sync_tilt()
   persist()
   ship.log("game over score=" .. score .. " lines=" .. lines .. " level=" .. level)
 end
@@ -104,7 +126,8 @@ local function new_game()
   nextk = take()
   spawn()
   mode = "run"
-  ship.every(interval())
+  sync_tilt()
+  ship.every(rate())
 end
 
 local function lock()
@@ -133,7 +156,7 @@ local function lock()
     score = score + LINE_SCORE[cleared] * level
     lines = lines + cleared
     level = lines // 10 + 1
-    ship.every(interval())
+    ship.every(rate())
   end
   spawn()
 end
@@ -160,6 +183,9 @@ end
 function ship.launch()
   empty_board()
   local s = ship.restore()
+  tilt_ok = ship.tilt_enable ~= nil and ship.tilt_enable(true)   -- probe: true only when the board has the sensor
+  if tilt_ok then ship.tilt_enable(false) end
+  tilt_on = tilt_ok and s ~= nil and s.tilt == true
   if s and type(s.board) == "string" and #s.board == W * H and (s.kind or 0) >= 1 and s.kind <= 7 then
     for i = 1, W * H do board[i] = (s.board:sub(i, i) == "1") and 1 or 0 end
     kind, rot, px, py = s.kind, (s.rot or 0) % 4, s.px or 3, s.py or 0
@@ -178,6 +204,7 @@ function ship.press(key, held)
       if held then
         mode = "pause"
         ship.every(0)
+        sync_tilt()
         persist()
         return
       end
@@ -187,13 +214,17 @@ function ship.press(key, held)
       lock()
     elseif mode == "pause" then
       mode = "run"
-      ship.every(interval())
+      sync_tilt()
+      ship.every(rate())
     else
       new_game()
     end
     return
   end
-  if mode ~= "run" then return end
+  if mode ~= "run" then
+    if key == "up" and tilt_ok then tilt_on = not tilt_on; persist() end
+    return
+  end
   if key == "left" and fits(kind, rot, px - 1, py) then
     px = px - 1
   elseif key == "right" and fits(kind, rot, px + 1, py) then
@@ -205,8 +236,27 @@ function ship.press(key, held)
   end
 end
 
+local function tilt_move()
+  local x = ship.tilt()
+  if not x or x == 0 then tacc = 0; return end
+  if (x > 0) ~= (tacc > 0) then tacc = 0 end           -- turned the other way: start over
+  tacc = tacc + x * TILT_GAIN
+  local dir = tacc > 0 and 1 or -1
+  while (tacc >= 1 or tacc <= -1) do
+    tacc = tacc - dir
+    if fits(kind, rot, px + dir, py) then px = px + dir else tacc = 0 end
+  end
+end
+
 function ship.pulse()
-  if mode == "run" then step(0) end
+  if mode ~= "run" then return end
+  if not tilt_pow then step(0); return end
+  tilt_move()
+  gacc = gacc + FLOOR
+  if gacc >= interval() then
+    gacc = gacc - interval()
+    step(0)
+  end
 end
 
 function ship.render(ui)
@@ -237,13 +287,14 @@ function ship.render(ui)
   ui.space(6)
   ui.grid{ cols = GC, rows = GR, cells = table.concat(cells) }
   if mode == "over" then
-    ui.status("GAME OVER")
+    ui.status(tilt_ok and ("GAME OVER  UP TILT " .. (tilt_on and "ON" or "OFF")) or "GAME OVER")
   elseif mode == "pause" then
-    ui.status("PAUSED")
+    ui.status(tilt_ok and ("PAUSED  UP TILT " .. (tilt_on and "ON" or "OFF")) or "PAUSED")
   elseif mode == "ready" then
-    ui.status("UP TURN  DOWN SOFT  HOLD OK PAUSE")
+    ui.status(tilt_ok and ("UP TILT " .. (tilt_on and "ON" or "OFF") .. "  HOLD OK PAUSE")
+              or "UP TURN  DOWN SOFT  HOLD OK PAUSE")
   else
-    ui.status("NEXT AT RIGHT")
+    ui.status(tilt_pow and "TILT STEERS  NEXT AT RIGHT" or "NEXT AT RIGHT")
   end
   if mode == "run" then ui.hints{ "menu", "drop", "left", "right" }
   elseif mode == "over" then ui.hints{ "menu", "again" }
