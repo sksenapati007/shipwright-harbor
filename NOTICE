@@ -1,0 +1,14 @@
+Shipwright Harbor and Dock
+Copyright (c) 2026 Shipwright contributors. MIT licensed (see LICENSE).
+
+This repository includes third-party work:
+
+- JetBrains Mono v2.304 (SIL Open Font License 1.1), Copyright 2020 The JetBrains Mono Project Authors
+  (https://github.com/JetBrains/JetBrainsMono). Harbor ships it as harbor/public/fonts/*.woff2.
+  Licence text: harbor/LICENSES/JetBrainsMono-OFL.txt.
+- pixelarticons 2.4.2 (MIT), Copyright (c) 2019 Gerrit Halfmann (https://github.com/halfmage/pixelarticons),
+  used as inlined SVG path data in harbor/src/lib/icons.ts. Licence text: harbor/LICENSES/pixelarticons-MIT.txt.
+- npm packages that Harbor depends on are listed in harbor/package.json and harbor/package-lock.json, each under
+  its own licence.
+
+The Dock ships (dock/ships/*.lua) and their art are original work for Shipwright, covered by LICENSE.

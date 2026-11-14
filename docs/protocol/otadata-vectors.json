@@ -1,0 +1,221 @@
+{
+ "format": "otadata entry: seq u32le | 20 x 0xFF | state u32le | crc u32le; crc = crc32_le(0xFFFFFFFF, seq bytes) = zlib.crc32(seq_bytes, 0xFFFFFFFF); bank = (seq-1)%2; live = crc ok and seq not in (0, 0xFFFFFFFF) and state not in (3 INVALID, 4 ABORTED). Hex strings are the 32 entry bytes of a sector (an erased sector is 32 x ff). 'next': new entry goes in the sector that does not hold the max live seq; seq = smallest greater than the max live seq with (seq-1)%2 == target bank; no live entry: sector 0, seq 1 or 2.",
+ "states": {
+  "NEW": 0,
+  "PENDING_VERIFY": 1,
+  "VALID": 2,
+  "INVALID": 3,
+  "ABORTED": 4,
+  "UNDEFINED": 4294967295
+ },
+ "crc": [
+  {
+   "seq": 1,
+   "crc_le_hex": "9a984347",
+   "source": "real device"
+  },
+  {
+   "seq": 4,
+   "crc_le_hex": "a8689d70",
+   "source": "real device"
+  },
+  {
+   "seq": 5,
+   "crc_le_hex": "cd0f21c8",
+   "source": "real device"
+  },
+  {
+   "seq": 2,
+   "crc_le_hex": "7437f655",
+   "source": "computed"
+  },
+  {
+   "seq": 6,
+   "crc_le_hex": "23a094da",
+   "source": "computed"
+  },
+  {
+   "seq": 7,
+   "crc_le_hex": "46c72862",
+   "source": "computed"
+  },
+  {
+   "seq": 255,
+   "crc_le_hex": "0ef9fa21",
+   "source": "computed"
+  }
+ ],
+ "entries": [
+  {
+   "name": "device sector 0",
+   "hex": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "seq": 5,
+   "state": 2,
+   "crc_ok": true,
+   "live": true,
+   "bank": 0
+  },
+  {
+   "name": "device sector 1 (state undefined)",
+   "hex": "04000000ffffffffffffffffffffffffffffffffffffffffffffffffa8689d70",
+   "seq": 4,
+   "state": 4294967295,
+   "crc_ok": true,
+   "live": true,
+   "bank": 1
+  },
+  {
+   "name": "erased",
+   "hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "seq": 4294967295,
+   "state": 4294967295,
+   "crc_ok": false,
+   "live": false,
+   "bank": null
+  },
+  {
+   "name": "bad crc",
+   "hex": "06000000ffffffffffffffffffffffffffffffffffffffff0000000000000000",
+   "seq": 6,
+   "state": 0,
+   "crc_ok": false,
+   "live": false,
+   "bank": null
+  },
+  {
+   "name": "invalid state",
+   "hex": "07000000ffffffffffffffffffffffffffffffffffffffff0300000046c72862",
+   "seq": 7,
+   "state": 3,
+   "crc_ok": true,
+   "live": false,
+   "bank": 0
+  },
+  {
+   "name": "aborted state",
+   "hex": "08000000ffffffffffffffffffffffffffffffffffffffff0400000010d74b3a",
+   "seq": 8,
+   "state": 4,
+   "crc_ok": true,
+   "live": false,
+   "bank": 1
+  },
+  {
+   "name": "new state",
+   "hex": "06000000ffffffffffffffffffffffffffffffffffffffff0000000023a094da",
+   "seq": 6,
+   "state": 0,
+   "crc_ok": true,
+   "live": true,
+   "bank": 1
+  }
+ ],
+ "choose": [
+  {
+   "name": "real device state",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "04000000ffffffffffffffffffffffffffffffffffffffffffffffffa8689d70",
+   "live_sector": 0,
+   "live_seq": 5,
+   "bank": 0
+  },
+  {
+   "name": "both erased",
+   "sector0": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "sector1": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "live_sector": null,
+   "live_seq": null,
+   "bank": 0
+  },
+  {
+   "name": "higher seq in sector 1",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "06000000ffffffffffffffffffffffffffffffffffffffff0000000023a094da",
+   "live_sector": 1,
+   "live_seq": 6,
+   "bank": 1
+  },
+  {
+   "name": "highest entry invalid, other live",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "06000000ffffffffffffffffffffffffffffffffffffffff0300000023a094da",
+   "live_sector": 0,
+   "live_seq": 5,
+   "bank": 0
+  },
+  {
+   "name": "torn sector 1 (bad crc), sector 0 wins",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "06000000ffffffffffffffffffffffffffffffffffffffff00000000deadbeef",
+   "live_sector": 0,
+   "live_seq": 5,
+   "bank": 0
+  },
+  {
+   "name": "only sector 1 live",
+   "sector0": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "sector1": "02000000ffffffffffffffffffffffffffffffffffffffff020000007437f655",
+   "live_sector": 1,
+   "live_seq": 2,
+   "bank": 1
+  }
+ ],
+ "next": [
+  {
+   "name": "real device, select app1 -> seq 6 in sector 1",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "04000000ffffffffffffffffffffffffffffffffffffffffffffffffa8689d70",
+   "target_bank": 1,
+   "expect_seq": 6,
+   "expect_sector": 1
+  },
+  {
+   "name": "real device, select app0 again -> seq 7 in sector 1",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "04000000ffffffffffffffffffffffffffffffffffffffffffffffffa8689d70",
+   "target_bank": 0,
+   "expect_seq": 7,
+   "expect_sector": 1
+  },
+  {
+   "name": "after install (seq 6 sector 1), revert to app0 -> seq 7 in sector 0",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "06000000ffffffffffffffffffffffffffffffffffffffff0000000023a094da",
+   "target_bank": 0,
+   "expect_seq": 7,
+   "expect_sector": 0
+  },
+  {
+   "name": "after install, reselect app1 -> seq 8 in sector 0",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "06000000ffffffffffffffffffffffffffffffffffffffff0000000023a094da",
+   "target_bank": 1,
+   "expect_seq": 8,
+   "expect_sector": 0
+  },
+  {
+   "name": "both erased, app0",
+   "sector0": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "sector1": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "target_bank": 0,
+   "expect_seq": 1,
+   "expect_sector": 0
+  },
+  {
+   "name": "both erased, app1",
+   "sector0": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "sector1": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "target_bank": 1,
+   "expect_seq": 2,
+   "expect_sector": 0
+  },
+  {
+   "name": "torn sector 1, select app1 -> seq 6 in sector 1",
+   "sector0": "05000000ffffffffffffffffffffffffffffffffffffffff02000000cd0f21c8",
+   "sector1": "06000000ffffffffffffffffffffffffffffffffffffffff00000000deadbeef",
+   "target_bank": 1,
+   "expect_seq": 6,
+   "expect_sector": 1
+  }
+ ]
+}

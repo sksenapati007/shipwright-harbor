@@ -1,0 +1,155 @@
+{
+  "dock": 1,
+  "updated": "2026-11-13T00:00:00Z",
+  "base": "https://sksenapati007.github.io/shipwright-harbor/dock/",
+  "items": [
+    {
+      "id": "analytics",
+      "kind": "ship",
+      "title": "Analytics",
+      "summary": "Chart any numeric series from a JSON URL you configure (no default URL).",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "finance",
+        "chart"
+      ],
+      "accounts": [],
+      "path": "ships/analytics.lua",
+      "size": 8423,
+      "sha256": "56ec88a6d122615b99d330573cb6aaaeeb0dcc7258b61c313bf4f9b7a4db703a"
+    },
+    {
+      "id": "blackjack",
+      "kind": "ship",
+      "title": "Blackjack",
+      "summary": "Beat the dealer to 21. Hit, stand and double down.",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "game",
+        "cards"
+      ],
+      "accounts": [],
+      "path": "ships/blackjack.lua",
+      "size": 4568,
+      "sha256": "d6a0cd2ca7e86ae2041bc62ee475bb20376774dd03e9c4dc0cf865571381e99a"
+    },
+    {
+      "id": "blockfall",
+      "kind": "ship",
+      "title": "Blockfall",
+      "summary": "Falling-blocks puzzle on a 10x20 dot grid. Move, turn, drop, clear rows.",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "game",
+        "puzzle"
+      ],
+      "accounts": [],
+      "path": "ships/blockfall.lua",
+      "size": 7287,
+      "sha256": "ddb43ee1ef98e30445cede7ccd67b9ed785761f3aa0af3dd4e846ba75097bba1"
+    },
+    {
+      "id": "coin",
+      "kind": "ship",
+      "title": "Coin",
+      "summary": "Toss a coin: heads or tails with a pixel-art coin, a decide mode with your own words, and your last ",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "game",
+        "tool"
+      ],
+      "accounts": [],
+      "path": "ships/coin.lua",
+      "size": 6770,
+      "sha256": "78b16b8c23aa35382705f8bc17fcd5f31091897cd3cc893f2f38ed732544ee6d",
+      "assets": [
+        {
+          "path": "art/coin_heads.sbm",
+          "size": 11408,
+          "sha256": "c0ee11395fb895e3da06be762a003fa12227e11df258fe94fb0cb6a730435161"
+        },
+        {
+          "path": "art/coin_tails.sbm",
+          "size": 11408,
+          "sha256": "e1b5c1082e0d2be0dd7127828e3225179148aa6842e2592a97fa53046a7fdb63"
+        },
+        {
+          "path": "art/coin_spin1.sbm",
+          "size": 8708,
+          "sha256": "af2b176711b7c2892df1341cc3a467d0821d011f7e7f44fba162b917f6359b0c"
+        },
+        {
+          "path": "art/coin_spin2.sbm",
+          "size": 1208,
+          "sha256": "d6b7828d038b86817b284ffb04c18a804e55b4db7d1bb8253425a278902fe6f1"
+        },
+        {
+          "path": "art/coin_spin3.sbm",
+          "size": 6308,
+          "sha256": "e6d17f2f652fd03e201fb0ec044e310e177b1d9076313e527862db411e98f7dc"
+        }
+      ]
+    },
+    {
+      "id": "github",
+      "kind": "ship",
+      "title": "GitHub",
+      "summary": "Open issues, review requests and notifications from GitHub. Sign in under Connections.",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "tool",
+        "dev"
+      ],
+      "accounts": [
+        "github"
+      ],
+      "path": "ships/github.lua",
+      "size": 8098,
+      "sha256": "3ec11d83fd8d727d4105bf53d7ee033e4a194ea39d2e92fdf0cbdd240521d8f0"
+    },
+    {
+      "id": "snake",
+      "kind": "ship",
+      "title": "Snake",
+      "summary": "Classic snake on a dot-grid board. Arrows steer, OK pauses.",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "game",
+        "arcade"
+      ],
+      "accounts": [],
+      "path": "ships/snake.lua",
+      "size": 4084,
+      "sha256": "2a9993001946c0438fe59454cfbd51a5b72a6b11432070b9395f59ab47052975"
+    },
+    {
+      "id": "stocks",
+      "kind": "ship",
+      "title": "Stocks",
+      "summary": "Day chart with MA10 and MA20 for any JSON price endpoint you configure (no key built in).",
+      "author": "Shipwright",
+      "version": "1.0.0",
+      "api": 1,
+      "tags": [
+        "finance",
+        "chart"
+      ],
+      "accounts": [],
+      "path": "ships/stocks.lua",
+      "size": 10922,
+      "sha256": "d60e45e515adb99f45f714d11940ad3adf28b3ec48ce6a78b1b1b0256ea72619"
+    }
+  ]
+}

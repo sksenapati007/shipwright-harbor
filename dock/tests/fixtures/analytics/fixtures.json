@@ -1,0 +1,14 @@
+{
+ "https://data.test/a.json": {
+  "status": 200,
+  "file": "series.json"
+ },
+ "https://data.test/bad.json": {
+  "status": 200,
+  "file": "bad.json"
+ },
+ "https://data.test/err.json": {
+  "status": 500,
+  "file": "bad.json"
+ }
+}

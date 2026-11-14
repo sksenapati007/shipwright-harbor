@@ -1,0 +1,35 @@
+{
+  "name": "shipwright-harbor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Harbor: offline PWA that syncs books, ships and settings to a Shipwright OS device over Web Bluetooth.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "idb-keyval": "6.2.1",
+    "preact": "10.24.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.48.2",
+    "@preact/preset-vite": "2.9.1",
+    "fake-indexeddb": "6.0.0",
+    "typescript": "5.6.3",
+    "vite": "5.4.10",
+    "vite-plugin-pwa": "0.20.5",
+    "vitest": "2.1.4"
+  },
+  "overrides": {
+    "path-scurry": {
+      "lru-cache": "11.0.2"
+    },
+    "serialize-javascript": "6.0.2"
+  }
+}

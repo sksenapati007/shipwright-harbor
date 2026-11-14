@@ -1,0 +1,55 @@
+# Publishes Harbor (PWA) and the Dock (catalog.json + ships) to GitHub Pages. No secrets: uses the built-in GITHUB_TOKEN.
+# URLs: https://sksenapati007.github.io/shipwright-harbor/  and  .../dock/catalog.json. Lives in the public repo sksenapati007/shipwright-harbor (copied there by scripts/publish_harbor.sh).
+name: Publish Harbor and Dock
+
+on:
+  push:
+    branches: [main]
+    paths: ['harbor/**', 'dock/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: harbor/package-lock.json
+      - name: Build Harbor
+        run: |
+          npm --prefix harbor ci
+          npm --prefix harbor run build
+      - name: Assemble site
+        run: |
+          mkdir -p site/dock
+          cp -R harbor/dist/. site/
+          cp dock/catalog.json site/dock/
+          cp -R dock/ships site/dock/ships
+          if [ -d dock/art ]; then cp -R dock/art site/dock/art; fi
+          touch site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

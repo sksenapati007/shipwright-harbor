@@ -1,0 +1,15 @@
+/* Layout helpers shared by the 6E feature panels (device, books, ships). Uses the shell's tokens only. */
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 0 0 12px; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0 0 12px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-family: var(--mono); }
+.small { font-size: 0.85rem; }
+.err { color: #b00020; font-weight: 700; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .err { color: #ff8a80; } }
+:root[data-theme="dark"] .err { color: #ff8a80; }
+ul.list { list-style: none; padding: 0; margin: 0 0 12px; }
+ul.list > li { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 0; border-top: 2px solid var(--line); }
+ul.list > li:first-child { border-top: 0; }
+.grow { flex: 1 1 14rem; min-width: 0; overflow-wrap: anywhere; }
+.field { flex: 1 1 16rem; min-height: 44px; padding: 8px 10px; font: 0.9rem var(--mono); color: var(--fg); background: var(--bg); border: 2px solid var(--line); }
+progress { accent-color: var(--accent); height: 14px; }

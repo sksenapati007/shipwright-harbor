@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shipwright.invalid/schemas/dock-catalog-1.json",
+  "title": "Shipwright Dock catalogue (plan 3.3)",
+  "description": "Normative schema of dock/catalog.json. The file is 1 MiB or less. Ship paths are relative to base; url is absolute (off-site files). Destinations: ships /ships, assets /ships/art, books /books.",
+  "type": "object",
+  "required": ["dock", "updated", "base", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "dock": { "const": 1 },
+    "updated": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "base": { "type": "string", "pattern": "^https?://[^\\s]+/$" },
+    "firmware": {
+      "type": "object",
+      "required": ["board", "version", "path", "size", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "board": { "const": "x4c" },
+        "version": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "path": { "type": "string", "minLength": 1 },
+        "size": { "type": "integer", "minimum": 1, "maximum": 5767168 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "notes": { "type": "string", "maxLength": 1000 }
+      }
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": { "$ref": "#/$defs/item" }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9_-]{1,32}$" },
+    "relpath": { "type": "string", "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$", "not": { "pattern": "(^|/)\\.\\.?(/|$)" } },
+    "asset": {
+      "type": "object",
+      "required": ["path", "size", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "$ref": "#/$defs/relpath" },
+        "size": { "type": "integer", "minimum": 1, "maximum": 262144 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "item": {
+      "type": "object",
+      "required": ["id", "kind", "title", "summary", "version", "size", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["ship", "book", "art"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "summary": { "type": "string", "maxLength": 100 },
+        "author": { "type": "string", "maxLength": 60 },
+        "version": { "type": "string", "minLength": 1, "maxLength": 15 },
+        "api": { "type": "integer", "minimum": 1 },
+        "tags": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9_-]{1,20}$" }, "maxItems": 8 },
+        "accounts": { "type": "array", "items": { "type": "string" } },
+        "path": { "$ref": "#/$defs/relpath" },
+        "url": { "type": "string", "pattern": "^https?://[^\\s]+$" },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "assets": { "type": "array", "maxItems": 8, "items": { "$ref": "#/$defs/asset" } }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        { "anyOf": [ { "required": ["path"] }, { "required": ["url"] } ] },
+        {
+          "if": { "properties": { "kind": { "const": "ship" } } },
+          "then": { "properties": { "size": { "maximum": 131072 } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "art" } } },
+          "then": { "properties": { "size": { "maximum": 262144 } }, "not": { "required": ["assets"] } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "book" } } },
+          "then": { "properties": { "size": { "maximum": 67108864 } }, "not": { "required": ["assets"] } }
+        }
+      ]
+    }
+  }
+}

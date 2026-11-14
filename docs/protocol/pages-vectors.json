@@ -1,0 +1,191 @@
+{
+ "about": "Shared vectors for Pages end-to-end encryption (AES-256-GCM). Checked by firmware/test/test_pages_crypto, harbor/tests/pages-crypto.test.ts and drydock/tests/test_page_crypto.py. Envelope: {\"v\":2,\"n\":base64(nonce 12),\"c\":base64(ciphertext+tag 16)}, compact JSON, key order v,n,c.",
+ "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+ "key_b64url": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+ "key_b64": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+ "aes_gcm": [
+  {
+   "name": "mcgrew-viega-14",
+   "key": "0000000000000000000000000000000000000000000000000000000000000000",
+   "nonce": "000000000000000000000000",
+   "aad": "",
+   "pt": "00000000000000000000000000000000",
+   "ct": "cea7403d4d606b6e074ec5d3baf39d18",
+   "tag": "d0d1c8a799996bf0265b98b5d48ab919"
+  },
+  {
+   "name": "empty plaintext",
+   "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+   "nonce": "6465666768696a6b6c6d6e6f",
+   "aad": "736869707772696768742d70616765732d76323a70616765",
+   "pt": "",
+   "ct": "",
+   "tag": "ad9b37d9c0fb488fcbf65dd71787e4f5"
+  },
+  {
+   "name": "one byte",
+   "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+   "nonce": "6465666768696a6b6c6d6e6f",
+   "aad": "736869707772696768742d70616765732d76323a7265706c79",
+   "pt": "78",
+   "ct": "30",
+   "tag": "5520d34a2349caaa47fca68264a7aacf"
+  },
+  {
+   "name": "block boundary",
+   "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+   "nonce": "0102030405060708090a0b0c",
+   "aad": "686472",
+   "pt": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f",
+   "ct": "05eb58d6e891f68144ab694c1c1ee4275252f3ed837846d2b946e33f82ab68daa4c5b9fc4a90cab8988590cee9f6d672",
+   "tag": "ceb1955d068bbcdd66c2c2f4b0a9289b"
+  },
+  {
+   "name": "long with aad",
+   "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+   "nonce": "c8c9cacbcccdcecfd0d1d2d3",
+   "aad": "41414141414141414141414141414141414141414141414141414141414141414141414141",
+   "pt": "030a11181f262d343b424950575e656c737a81888f969da4abb2b9c0c7ced5dce3eaf1f8ff060d141b222930373e454c535a61686f767d848b9299a0a7aeb5bcc3cad1d8dfe6edf4fb020910171e252c333a41484f565d646b727980878e959ca3aab1b8bfc6cdd4dbe2e9f0f7fe050c131a21282f363d444b525960676e757c838a91989fa6adb4bbc2c9d0d7dee5ecf3fa01080f161d242b323940474e555c636a71787f868d949ba2a9b0b7bec5ccd3dae1e8eff6fd040b121920272e353c434a51585f666d747b828990979ea5acb3bac1c8cfd6dde4ebf2f900070e151c232a31383f464d545b626970777e858c939aa1a8afb6bdc4cbd2d9e0e7eef5fc030a11181f262d343b424950575e656c737a81888f969da4abb2b9c0c7ced5dce3eaf1f8ff060d141b222930373e454c535a61686f767d848b9299a0a7aeb5bcc3cad1d8dfe6edf4fb02091017",
+   "ct": "127270c399ead6144f7e56ee49588e7893fd6d208bfd3580461b82211d5f7e352f66db5e6d1927be29dd6d97872944ac8ceb7ad0eb7b8a94908adf3506fcf2800535759cfaabcf3577e35a78f08194fb375fd46077f62c4777ddd17a7cceb68695c3dc13f4216ea6d8dc8e54d8b26364da95ef48f72ef532add7bd32a7b8467988ca4cf16d384a16b0d49cd04ef911d13b4955795a63b5a68d8bf0ecc7bfd95c5f1c1f263ce4c532d280f53a3d30bd8085250647ca698c633328aa9470f12639daf89f89c831d0910acb2a7567bb3ccbcacdaa98adb144703bdea42b9e445f70db1b749d818fece57ee90e67afbe7e873ead5f197f780caff09320dccb59b6675d8dcd4024d31fd52e790eee0fefdc042b5b980ddaa7225a9e2ef268552c667dce3b6c9ddbee1e6791404ac24aab85a56939d277130cee817f65cad19ff998e9f6156671405b1e3d94e5059846",
+   "tag": "b560208f3a372ce84d4f210f7c3a3595"
+  }
+ ],
+ "envelopes": [
+  {
+   "name": "page",
+   "aad": "shipwright-pages-v2:page",
+   "plain": "{\"v\":1,\"title\":\"Deploy to prod?\",\"body\":\"Build 412 is green.\\nShip it now?\",\"choices\":[\"yes\",\"no\",\"later\"],\"from\":\"agent\",\"thread\":\"t1\",\"text\":true}",
+   "envelope": "{\"v\":2,\"n\":\"AAECAwQFBgcICQoL\",\"c\":\"PCCgOf/U7jn5KOPn1MtCT8ez91ifAn8IV0eV93INP5AtMsyTy7gwolbmCoTk4wgM32tA5Cn2xKha8kQ3RI2mhplM5hOn8UgOa2uIQs3sZodR6awRVFkISoSY7e5U0tfi6dR7isU1rWi8QRKQLgdOEphdQMqEoEvub9N1ueqUC2/fcDrkwObpfyqVLdlJ+Ha2RIGGSLbfN9csTK6SjYb2WbeQbXM=\"}",
+   "nonce": "000102030405060708090a0b"
+  },
+  {
+   "name": "reply",
+   "aad": "shipwright-pages-v2:reply",
+   "plain": "{\"v\":1,\"re\":\"m001\",\"choice\":\"yes\",\"i\":0}",
+   "envelope": "{\"v\":2,\"n\":\"DA0ODxAREhMUFRYX\",\"c\":\"49wf+kVH0HFFT2rvs+YW12QhwcyVFVTD+MfY2sbZpYkO20hMw/8WHGt4T65E2SRDNwN3tJ7gLso=\"}",
+   "nonce": "0c0d0e0f1011121314151617"
+  },
+  {
+   "name": "unicode page",
+   "aad": "shipwright-pages-v2:page",
+   "plain": "{\"v\":1,\"title\":\"Caf\\u00e9 \\u2615\",\"body\":\"na\u00efve \u2013 \u65e5\u672c\u8a9e\",\"choices\":[\"ok\"]}",
+   "envelope": "{\"v\":2,\"n\":\"KCkqKywtLi8wMTIz\",\"c\":\"m5Ac5sleTae0AC5kQo2wwQDfpdha0i0YaIr53bnQNwblzMhztZbNTLY87fSfgvJ28X6YsBsfWhXdXfzowQoAePAb+P7k4EcF+EhY6yCzLwCOA1VjOjlBioQyxqD4N2P4Mg==\"}",
+   "nonce": "28292a2b2c2d2e2f30313233"
+  }
+ ],
+ "bad_envelopes": [
+  {
+   "name": "flipped ciphertext bit",
+   "aad": "shipwright-pages-v2:page",
+   "envelope": "{\"v\":2,\"n\":\"AAECAwQFBgcICQoL\",\"c\":\"PCCgOP/U7jn5KOPn1MtCT8ez91ifAn8IV0eV93INP5AtMsyTy7gwolbmCoTk4wgM32tA5Cn2xKha8kQ3RI2mhplM5hOn8UgOa2uIQs3sZodR6awRVFkISoSY7e5U0tfi6dR7isU1rWi8QRKQLgdOEphdQMqEoEvub9N1ueqUC2/fcDrkwObpfyqVLdlJ+Ha2RIGGSLbfN9csTK6SjYb2WbeQbXM=\"}"
+  },
+  {
+   "name": "reply envelope opened as a page",
+   "aad": "shipwright-pages-v2:page",
+   "envelope": "{\"v\":2,\"n\":\"DA0ODxAREhMUFRYX\",\"c\":\"49wf+kVH0HFFT2rvs+YW12QhwcyVFVTD+MfY2sbZpYkO20hMw/8WHGt4T65E2SRDNwN3tJ7gLso=\"}"
+  },
+  {
+   "name": "short ciphertext",
+   "aad": "shipwright-pages-v2:page",
+   "envelope": "{\"v\":2,\"n\":\"AAECAwQFBgcICQoL\",\"c\":\"c2hvcnQ=\"}"
+  },
+  {
+   "name": "short nonce",
+   "aad": "shipwright-pages-v2:page",
+   "envelope": "{\"v\":2,\"n\":\"MTIz\",\"c\":\"PCCgOf/U7jn5KOPn1MtCT8ez91ifAn8IV0eV93INP5AtMsyTy7gwolbmCoTk4wgM32tA5Cn2xKha8kQ3RI2mhplM5hOn8UgOa2uIQs3sZodR6awRVFkISoSY7e5U0tfi6dR7isU1rWi8QRKQLgdOEphdQMqEoEvub9N1ueqUC2/fcDrkwObpfyqVLdlJ+Ha2RIGGSLbfN9csTK6SjYb2WbeQbXM=\"}"
+  },
+  {
+   "name": "wrong version",
+   "aad": "shipwright-pages-v2:page",
+   "envelope": "{\"v\":1,\"n\":\"AAECAwQFBgcICQoL\",\"c\":\"PCCgOf/U7jn5KOPn1MtCT8ez91ifAn8IV0eV93INP5AtMsyTy7gwolbmCoTk4wgM32tA5Cn2xKha8kQ3RI2mhplM5hOn8UgOa2uIQs3sZodR6awRVFkISoSY7e5U0tfi6dR7isU1rWi8QRKQLgdOEphdQMqEoEvub9N1ueqUC2/fcDrkwObpfyqVLdlJ+Ha2RIGGSLbfN9csTK6SjYb2WbeQbXM=\"}"
+  },
+  {
+   "name": "not base64",
+   "aad": "shipwright-pages-v2:page",
+   "envelope": "{\"v\":2,\"n\":\"!!!!\",\"c\":\"@@@@\"}"
+  }
+ ],
+ "keys": {
+  "valid": [
+   "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+   "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+   "AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA",
+   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  ],
+  "invalid": [
+   "",
+   "abc",
+   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8!",
+   "not a key at all",
+   "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh"
+  ]
+ },
+ "base64": [
+  {
+   "hex": "",
+   "b64": ""
+  },
+  {
+   "hex": "66",
+   "b64": "Zg=="
+  },
+  {
+   "hex": "666f",
+   "b64": "Zm8="
+  },
+  {
+   "hex": "666f6f",
+   "b64": "Zm9v"
+  },
+  {
+   "hex": "fbff",
+   "b64": "+/8="
+  }
+ ],
+ "free_text_flag": "text",
+ "cli_page": {
+  "args": {
+   "title": "Q?",
+   "body": "b",
+   "choices": "a,b",
+   "text": true,
+   "thread": "t1"
+  },
+  "wire": "{\"v\": 1, \"title\": \"Q?\", \"body\": \"b\", \"from\": \"agent\", \"choices\": [\"a\", \"b\"], \"text\": true, \"thread\": \"t1\"}",
+  "expect": {
+   "title": "Q?",
+   "body": "b",
+   "from": "agent",
+   "thread": "t1",
+   "choices": [
+    "a",
+    "b"
+   ],
+   "free_text": true
+  }
+ },
+ "page_parse": [
+  {
+   "name": "text flag",
+   "wire": "{\"v\":1,\"title\":\"Q\",\"body\":\"b\",\"choices\":[\"a\"],\"text\":true}",
+   "free_text": true
+  },
+  {
+   "name": "the old name free is not the flag",
+   "wire": "{\"v\":1,\"title\":\"Q\",\"body\":\"b\",\"choices\":[\"a\"],\"free\":true}",
+   "free_text": false
+  },
+  {
+   "name": "text as a string is not the flag",
+   "wire": "{\"v\":1,\"title\":\"Q\",\"body\":\"b\",\"choices\":[\"a\"],\"text\":\"true\"}",
+   "free_text": false
+  },
+  {
+   "name": "no flag",
+   "wire": "{\"v\":1,\"title\":\"Q\",\"body\":\"b\"}",
+   "free_text": false
+  }
+ ]
+}
