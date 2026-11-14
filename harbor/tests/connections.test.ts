@@ -4,7 +4,7 @@ import { acctName, buildAccount, normalizeHost } from '../src/features/accounts/
 import { agentSnippet, newTopic, normalizeBase, pagesSecret } from '../src/features/pages/logic';
 import { pickSlot, pskProblem, ssidProblem } from '../src/features/wifi/logic';
 import { checkFeed, feedsFile, normalizeFeedUrl, parseFeeds } from '../src/features/news/logic';
-import { lockPatch, prefsProblem } from '../src/features/lockscreen/logic';
+import { LOCK_MODES, lockPatch, prefsProblem } from '../src/features/lockscreen/logic';
 import { validateBackup } from '../src/features/backup/validate';
 
 if (!globalThis.crypto) Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
@@ -95,5 +95,11 @@ describe('lock screen', () => {
   it('keys are in the shared backup rules (validate.ts and sys/backup.cpp)', () => {
     expect(validateBackup(lockPatch({ mode: 'book', every: -1, quiet: false })).ok).toBe(true);
     expect(validateBackup(lockPatch({ mode: 'ship', every: 0, quiet: true })).ok).toBe(true);
+    expect(validateBackup(lockPatch({ mode: 'smart', every: -1, quiet: false })).ok).toBe(true);
+  });
+  it('lists Smart right after Clock', () => {
+    const keys = LOCK_MODES.map((m) => m.key);
+    expect(keys[keys.indexOf('clock') + 1]).toBe('smart');
+    expect(LOCK_MODES.find((m) => m.key === 'smart')?.label).toBe('Smart');
   });
 });
