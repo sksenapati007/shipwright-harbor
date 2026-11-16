@@ -39,11 +39,12 @@ const RULES: Record<string, Rule> = {
   'keys.layout': { t: 'enum', values: ['default', 'swap_sides', 'left_handed'] },
   'reader.font': { t: 'enum', values: ['mono', 'serif'] },
   'reader.spacing': { t: 'enum', values: ['normal', 'roomy'] },
+  'reader.orientation': { t: 'enum', values: ['portrait', 'landscape', 'landscape-flip'] },
   'reader.tilt': { t: 'bool' },
   dock_url: { t: 'str', max: 200, url: true },
   'home.pins': { t: 'str', max: 200 },
   'browser.search': { t: 'str', max: 200 },
-  'lock.mode': { t: 'enum', values: ['ship', 'clock', 'smart', 'timeweather', 'todo', 'reminders', 'github', 'weather', 'news', 'book'] },
+  'lock.mode': { t: 'enum', values: ['ship', 'clock', 'smart', 'timeweather', 'thought', 'todo', 'reminders', 'github', 'weather', 'news', 'book'] },
   'lock.every': { t: 'int', lo: -1, hi: 60 },
   'lock.quiet': { t: 'bool' },
   tz: { t: 'tz' },
@@ -81,6 +82,36 @@ function valueOk(r: Rule, v: unknown): boolean {
   }
 }
 
+export const CITY_MAX = 5;
+export const CITY_NAME_MAX = 48;
+
+/** The "cities" list of a backup (Phase 9.8); the same order of checks as firmware sys/backup read_cities(). */
+function citiesError(v: unknown): BackupError | null {
+  if (!Array.isArray(v)) return 'bad_schema';
+  for (let i = 0; i < v.length; i++) {
+    if (i >= CITY_MAX) return 'bad_value';
+    const c = v[i];
+    if (!isObj(c)) return 'bad_value';
+    let hn = false,
+      ha = false,
+      ho = false;
+    for (const [k, x] of Object.entries(c)) {
+      if (k !== 'name' && k !== 'lat' && k !== 'lon') return 'unknown_key';
+      if (k === 'name') {
+        if (typeof x !== 'string' || x.length < 1 || x.length > CITY_NAME_MAX || !printable(x)) return 'bad_value';
+        hn = true;
+      } else {
+        const lim = k === 'lat' ? 90 : 180;
+        if (typeof x !== 'number' || !(x >= -lim && x <= lim)) return 'bad_value';
+        if (k === 'lat') ha = true;
+        else ho = true;
+      }
+    }
+    if (!hn || !ha || !ho) return 'bad_value';
+  }
+  return v.length === 0 ? 'bad_value' : null;
+}
+
 const NVS_KEY = /^e[0-3]_[0-3]$/;
 
 export function validateBackup(input: Uint8Array | string): Validation {
@@ -95,6 +126,7 @@ export function validateBackup(input: Uint8Array | string): Validation {
   const fail = (error: BackupError): Validation => ({ ok: false, error });
   if (!isObj(doc)) return fail('bad_schema');
   const keys: string[] = [];
+  let hasCities = false;
   let schema = false,
     kind = false;
   for (const [k, v] of Object.entries(doc)) {
@@ -114,6 +146,10 @@ export function validateBackup(input: Uint8Array | string): Validation {
         if (!valueOk(rule, sv)) return fail('bad_value');
         keys.push(sk);
       }
+    } else if (k === 'cities') {
+      const e = citiesError(v);
+      if (e) return fail(e);
+      hasCities = true;
     } else if (k === 'nvs') {
       if (!isObj(v)) return fail('bad_schema');
       for (const [ns, nv] of Object.entries(v)) {
@@ -130,6 +166,7 @@ export function validateBackup(input: Uint8Array | string): Validation {
     }
   }
   if (!schema || !kind) return fail('bad_schema');
+  if (hasCities) keys.push('cities');
   return { ok: true, keys };
 }
 

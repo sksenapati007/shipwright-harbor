@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Settings backup/restore validation vectors (docs/protocol; firmware sys/backup and harbor/src/features/backup/validate.ts). Input is the file bytes (hex; text is for the reader). 'keys' lists what a successful validation applies, in document order: setting keys, then nvs:<ns>.<key>. Errors: too_large (over max_bytes, checked first), not_json, bad_schema, unknown_key, bad_value; not_json (syntax of the whole document) comes before every other check; then the first schema/key/value problem in document order wins, and a missing schema or kind is bad_schema once the whole document was read. Files live in /data/backup: settings-YYYYMMDD-HHMM.json (written by the device), restore.json and patch.json (uploaded by Harbor, applied at the next start). Strings must be printable ASCII (the device rejects \\u escapes).",
+ "note": "Settings backup/restore validation vectors (docs/protocol; firmware sys/backup and harbor/src/features/backup/validate.ts). Input is the file bytes (hex; text is for the reader). 'keys' lists what a successful validation applies, in document order: setting keys, then nvs:<ns>.<key>. Errors: too_large (over max_bytes, checked first), not_json, bad_schema, unknown_key, bad_value; not_json (syntax of the whole document) comes before every other check; then the first schema/key/value problem in document order wins, and a missing schema or kind is bad_schema once the whole document was read. Files live in /data/backup: settings-YYYYMMDD-HHMM.json (written by the device), restore.json and patch.json (uploaded by Harbor, applied at the next start). Strings must be printable ASCII (the device rejects \\u escapes). A top-level \"cities\" array (Phase 9.8) holds 1..5 objects with exactly name (1..48 printable ASCII), lat (-90..90) and lon (-180..180): not an array is bad_schema, a bad count/entry/value is bad_value, a field besides name/lat/lon is unknown_key; its keys entry is the single word cities, listed after settings and nvs. A backup without cities leaves the city list on the device as it is.",
  "max_bytes": 8192,
  "cases": [
   {
@@ -487,6 +487,132 @@
    "name": "text size 5 refused",
    "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"text.size\":5}}",
    "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b22746578742e73697a65223a357d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: one city",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"Oslo\",\"lat\":59.91,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224f736c6f222c226c6174223a35392e39312c226c6f6e223a31302e37357d5d7d",
+   "ok": true,
+   "keys": "cities"
+  },
+  {
+   "name": "cities: five cities with settings",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"weather.cur\":4},\"cities\":[{\"name\":\"C0\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C1\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C2\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C3\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C4\",\"lat\":59.91,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b22776561746865722e637572223a347d2c22636974696573223a5b7b226e616d65223a224330222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224331222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224332222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224333222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224334222c226c6174223a35392e39312c226c6f6e223a31302e37357d5d7d",
+   "ok": true,
+   "keys": "weather.cur,cities"
+  },
+  {
+   "name": "cities: limits (name 48, lat/lon at the edges)",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"lat\":-90,\"lon\":180},{\"name\":\"x\",\"lat\":90.0,\"lon\":-180}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a22616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c226c6174223a2d39302c226c6f6e223a3138307d2c7b226e616d65223a2278222c226c6174223a39302e302c226c6f6e223a2d3138307d5d7d",
+   "ok": true,
+   "keys": "cities"
+  },
+  {
+   "name": "cities: six cities refused",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"C0\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C1\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C2\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C3\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C4\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"C5\",\"lat\":59.91,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224330222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224331222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224332222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224333222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224334222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224335222c226c6174223a35392e39312c226c6f6e223a31302e37357d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: empty list refused",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: not an array",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":{\"name\":\"x\"}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a7b226e616d65223a2278227d7d",
+   "ok": false,
+   "error": "bad_schema"
+  },
+  {
+   "name": "cities: entry not an object",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[\"Oslo\"]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b224f736c6f225d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: name empty",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"\",\"lat\":59.91,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a22222c226c6174223a35392e39312c226c6f6e223a31302e37357d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: name 49 chars",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"lat\":59.91,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c226c6174223a35392e39312c226c6f6e223a31302e37357d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: name not printable (escape)",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"a\\nb\",\"lat\":1,\"lon\":1}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a22615c6e62222c226c6174223a312c226c6f6e223a317d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: name not a string",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":5,\"lat\":1,\"lon\":1}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a352c226c6174223a312c226c6f6e223a317d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: lat 90.5",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"Oslo\",\"lat\":90.5,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224f736c6f222c226c6174223a39302e352c226c6f6e223a31302e37357d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: lat below -90",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"Oslo\",\"lat\":-90.01,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224f736c6f222c226c6174223a2d39302e30312c226c6f6e223a31302e37357d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: lon 180.5",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"Oslo\",\"lat\":59.91,\"lon\":180.5}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224f736c6f222c226c6174223a35392e39312c226c6f6e223a3138302e357d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: lon string",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"x\",\"lat\":1,\"lon\":\"2\"}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a2278222c226c6174223a312c226c6f6e223a2232227d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: missing lon",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"x\",\"lat\":1}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a2278222c226c6174223a317d5d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "cities: extra field q",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"x\",\"lat\":1,\"lon\":2,\"q\":\"x\"}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a2278222c226c6174223a312c226c6f6e223a322c2271223a2278227d5d7d",
+   "ok": false,
+   "error": "unknown_key"
+  },
+  {
+   "name": "cities: second city bad",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"cities\":[{\"name\":\"Oslo\",\"lat\":59.91,\"lon\":10.75},{\"name\":\"Oslo\",\"lat\":95,\"lon\":10.75}]}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224f736c6f222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224f736c6f222c226c6174223a39352c226c6f6e223a31302e37357d5d7d",
    "ok": false,
    "error": "bad_value"
   }
