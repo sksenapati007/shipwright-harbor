@@ -43,6 +43,7 @@ const RULES: Record<string, Rule> = {
   'reader.tilt': { t: 'bool' },
   dock_url: { t: 'str', max: 200, url: true },
   'home.pins': { t: 'str', max: 200 },
+  'home.frequent': { t: 'bool' },
   'browser.search': { t: 'str', max: 200 },
   'lock.mode': { t: 'enum', values: ['ship', 'clock', 'smart', 'timeweather', 'thought', 'shloka', 'todo', 'reminders', 'github', 'weather', 'news', 'book'] },
   'lock.every': { t: 'int', lo: -1, hi: 60 },

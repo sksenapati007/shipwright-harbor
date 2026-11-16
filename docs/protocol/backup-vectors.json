@@ -636,6 +636,34 @@
    "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c22636974696573223a5b7b226e616d65223a224f736c6f222c226c6174223a35392e39312c226c6f6e223a31302e37357d2c7b226e616d65223a224f736c6f222c226c6174223a39352c226c6f6e223a31302e37357d5d7d",
    "ok": false,
    "error": "bad_value"
+  },
+  {
+   "name": "home frequent off",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"home.frequent\":false}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b22686f6d652e6672657175656e74223a66616c73657d7d",
+   "ok": true,
+   "keys": "home.frequent"
+  },
+  {
+   "name": "home frequent as 1",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"home.frequent\":1}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b22686f6d652e6672657175656e74223a317d7d",
+   "ok": true,
+   "keys": "home.frequent"
+  },
+  {
+   "name": "home frequent not bool",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"home.frequent\":\"yes\"}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b22686f6d652e6672657175656e74223a22796573227d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "home frequent out of range",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"home.frequent\":2}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b22686f6d652e6672657175656e74223a327d7d",
+   "ok": false,
+   "error": "bad_value"
   }
  ]
 }
