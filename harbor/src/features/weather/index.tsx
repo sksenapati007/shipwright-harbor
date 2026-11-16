@@ -75,6 +75,11 @@ function WeatherPanel() {
         Harbor fetches the forecast from Open-Meteo (no account, no key) and sends it to the device, so the device can
         show it with Wi-Fi off.
       </p>
+      <p class="muted" data-testid="weather-cities-note">
+        The device keeps up to five cities (Weather app: hold OK for Add city, Remove city and Move to first), with its own
+        forecast for each. A forecast sent from here shows for the city on the device that is the same place; add other
+        places on the device.
+      </p>
       {err && (
         <p role="alert" class="err" data-testid="weather-error">
           {err}

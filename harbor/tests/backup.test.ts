@@ -36,6 +36,11 @@ describe('helpers', () => {
     expect(JSON.parse(p).settings).toEqual({ dock_url: 'https://example.org/dock/' });
     expect(validateBackup(p)).toEqual({ ok: true, keys: ['dock_url'] });
   });
+  it('accepts the Phase 9.7 weather.cur setting (the city on screen, 0..4) and refuses the rest', () => {
+    const doc = (v: unknown) => JSON.stringify({ schema: 1, kind: 'shipwright-settings', settings: { 'weather.cur': v } });
+    for (const v of [0, 2, 4]) expect(validateBackup(doc(v))).toEqual({ ok: true, keys: ['weather.cur'] });
+    for (const v of [5, -1, 1.5, '2', null, true]) expect(validateBackup(doc(v))).toEqual({ ok: false, error: 'bad_value' });
+  });
   it('newest backup picks the latest settings-* file and ignores the rest', () => {
     const e = (name: string, dir = false) => ({ name, dir });
     expect(newestBackup([])).toBeUndefined();

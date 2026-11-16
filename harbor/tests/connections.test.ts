@@ -97,6 +97,17 @@ describe('lock screen', () => {
     expect(validateBackup(lockPatch({ mode: 'ship', every: 0, quiet: true })).ok).toBe(true);
     expect(validateBackup(lockPatch({ mode: 'smart', every: -1, quiet: false })).ok).toBe(true);
   });
+  it('lists Time & weather right after Smart and accepts its intervals', () => {
+    const keys = LOCK_MODES.map((m) => m.key);
+    expect(keys[keys.indexOf('smart') + 1]).toBe('timeweather');
+    expect(LOCK_MODES.find((m) => m.key === 'timeweather')?.label).toBe('Time & weather');
+    for (const every of [-1, 0, 1, 5, 15]) {
+      expect(validateBackup(lockPatch({ mode: 'timeweather', every, quiet: false })).ok).toBe(true);
+    }
+    const j = JSON.parse(new TextDecoder().decode(lockPatch({ mode: 'timeweather', every: 1, quiet: true })));
+    expect(j.settings).toEqual({ 'lock.mode': 'timeweather', 'lock.every': 1, 'lock.quiet': true });
+    expect(prefsProblem({ mode: 'timeweather', every: 7, quiet: false })).toBeTruthy();
+  });
   it('lists Smart right after Clock', () => {
     const keys = LOCK_MODES.map((m) => m.key);
     expect(keys[keys.indexOf('clock') + 1]).toBe('smart');

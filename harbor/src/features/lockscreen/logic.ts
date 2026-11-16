@@ -1,6 +1,6 @@
 // Lock screen preferences, written as a settings patch (the Phase 6G path: /data/backup/patch.json, applied at the
 // device's next start). Keys are the ones the device reads (firmware sys/quietwake.cpp, apps/lockscreen.cpp):
-// lock.mode (one of 9), lock.every (minutes between quiet wakes: -1 = the mode's default, 0 = on wake only, 10, 30, 60),
+// lock.mode (one of 10), lock.every (minutes between quiet wakes: -1 = the mode's default, 0 = on wake only, 10, 30, 60),
 // lock.quiet (bool, no fetches 22:00-07:00).
 import { KIND, PATCH_PATH } from '../backup/validate';
 
@@ -8,6 +8,7 @@ export const LOCK_MODES = [
   { key: 'ship', label: 'Ship art' },
   { key: 'clock', label: 'Clock' },
   { key: 'smart', label: 'Smart' },
+  { key: 'timeweather', label: 'Time & weather' },
   { key: 'todo', label: 'Todo list' },
   { key: 'reminders', label: 'Reminders' },
   { key: 'github', label: 'GitHub issues' },
@@ -20,6 +21,9 @@ export type LockMode = (typeof LOCK_MODES)[number]['key'];
 export const LOCK_EVERY = [
   { value: -1, label: 'Default for the mode' },
   { value: 0, label: 'On wake only' },
+  { value: 1, label: 'Every 1 min (clock pages; Time & weather default)' },
+  { value: 5, label: 'Every 5 min (clock pages)' },
+  { value: 15, label: 'Every 15 min (clock pages)' },
   { value: 10, label: 'Every 10 min' },
   { value: 30, label: 'Every 30 min' },
   { value: 60, label: 'Every 60 min' },
