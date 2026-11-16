@@ -44,7 +44,7 @@ const RULES: Record<string, Rule> = {
   dock_url: { t: 'str', max: 200, url: true },
   'home.pins': { t: 'str', max: 200 },
   'browser.search': { t: 'str', max: 200 },
-  'lock.mode': { t: 'enum', values: ['ship', 'clock', 'smart', 'timeweather', 'thought', 'todo', 'reminders', 'github', 'weather', 'news', 'book'] },
+  'lock.mode': { t: 'enum', values: ['ship', 'clock', 'smart', 'timeweather', 'thought', 'shloka', 'todo', 'reminders', 'github', 'weather', 'news', 'book'] },
   'lock.every': { t: 'int', lo: -1, hi: 60 },
   'lock.quiet': { t: 'bool' },
   tz: { t: 'tz' },

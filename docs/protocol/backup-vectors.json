@@ -450,6 +450,27 @@
    "error": "bad_value"
   },
   {
+   "name": "lock screen shloka mode",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"lock.mode\":\"shloka\",\"lock.every\":-1,\"lock.quiet\":true}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b226c6f636b2e6d6f6465223a2273686c6f6b61222c226c6f636b2e6576657279223a2d312c226c6f636b2e7175696574223a747275657d7d",
+   "ok": true,
+   "keys": "lock.mode,lock.every,lock.quiet"
+  },
+  {
+   "name": "lock mode shloka look-alike",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"lock.mode\":\"shlokas\"}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b226c6f636b2e6d6f6465223a2273686c6f6b6173227d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
+   "name": "lock mode shloka wrong case",
+   "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"lock.mode\":\"Shloka\"}}",
+   "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b226c6f636b2e6d6f6465223a2253686c6f6b61227d7d",
+   "ok": false,
+   "error": "bad_value"
+  },
+  {
    "name": "lock every too big",
    "text": "{\"schema\":1,\"kind\":\"shipwright-settings\",\"settings\":{\"lock.every\":61}}",
    "hex": "7b22736368656d61223a312c226b696e64223a22736869707772696768742d73657474696e6773222c2273657474696e6773223a7b226c6f636b2e6576657279223a36317d7d",

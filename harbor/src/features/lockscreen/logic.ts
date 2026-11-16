@@ -10,6 +10,7 @@ export const LOCK_MODES = [
   { key: 'smart', label: 'Smart' },
   { key: 'timeweather', label: 'Time & weather' },
   { key: 'thought', label: 'Thought of the day' },
+  { key: 'shloka', label: 'Shloka of the day' },
   { key: 'todo', label: 'Todo list' },
   { key: 'reminders', label: 'Reminders' },
   { key: 'github', label: 'GitHub issues' },

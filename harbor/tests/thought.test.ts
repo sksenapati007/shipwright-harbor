@@ -8,9 +8,10 @@ describe('lock mode: Thought of the day', () => {
   it('is listed right after Time & weather with its label', () => {
     const keys = LOCK_MODES.map((m) => m.key);
     expect(keys[keys.indexOf('timeweather') + 1]).toBe('thought');
-    expect(keys[keys.indexOf('thought') + 1]).toBe('todo');
+    expect(keys[keys.indexOf('thought') + 1]).toBe('shloka');
+    expect(keys[keys.indexOf('shloka') + 1]).toBe('todo');
     expect(LOCK_MODES.find((m) => m.key === 'thought')?.label).toBe('Thought of the day');
-    expect(keys).toHaveLength(11);
+    expect(keys).toHaveLength(12);
   });
   it('makes a valid patch that the shared rules accept', () => {
     for (const every of [-1, 0]) {
