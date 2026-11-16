@@ -27,7 +27,7 @@ const RULES: Record<string, Rule> = {
   'sleep.idle_s': { t: 'int', lo: 30, hi: 7200 },
   'sleep.usb_awake': { t: 'bool' },
   'wifi.stay_on': { t: 'bool' },
-  'text.size': { t: 'int', lo: 0, hi: 3 },
+  'text.size': { t: 'int', lo: 0, hi: 4 },
   'text.justify': { t: 'bool' },
   'cal.week_start': { t: 'int', lo: 0, hi: 6 },
   'clock.24h': { t: 'bool' },
